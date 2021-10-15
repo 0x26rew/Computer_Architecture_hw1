@@ -1,7 +1,7 @@
 .data
 str1: .string " is ugly"
 str2: .string " is not ugly"
-input_num: .word 300                # input number
+input_num: .word 301                # input number
 
 .text
 main:
@@ -10,20 +10,10 @@ main:
     jal   func                         # jump to function
     add   s3, a1, zero                 # store the return value of func
     beqz  s3, not_ugly                 # branch when input number is not ugly
-    add   a0, s2, zero                 # print input integer
-    li    a7, 1
-    ecall
-    la    a0, str1                     # print str1
-    li    a7, 4
-    ecall
+    jal   print_ugly
     j     end
 not_ugly:
-    add   a0, s2, zero                 # print input integer
-    li    a7, 1                        
-    ecall
-    la    a0, str2                     # print str2
-    li    a7, 4
-    ecall
+    jal     print_not_ugly
 end:                                   # end programm
     li    a7, 10
     ecall
@@ -55,4 +45,21 @@ compare:
     li    t0, 1                        
     blt   t0, a0, loop                 # if n > 1 go to loop
 return:
+    jr    ra
+    
+print_ugly:
+    add   a0, s2, zero                 # print input integer n
+    li    a7, 1
+    ecall
+    la    a0, str1                     # print str1
+    li    a7, 4
+    ecall
+    jr    ra
+print_not_ugly:
+    add   a0, s2, zero                 # print input integer n
+    li    a7, 1
+    ecall
+    la    a0, str2                     # print str1
+    li    a7, 4
+    ecall
     jr    ra
