@@ -17,7 +17,7 @@ int main() {
 int isUgly(int n) {
     int ugly = 1;
     if (n <= 1)
-	    ugly = 0;
+        ugly = 0;
     do {
         if (n % 2 == 0)
             n /= 2;
