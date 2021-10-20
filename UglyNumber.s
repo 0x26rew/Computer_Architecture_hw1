@@ -1,65 +1,70 @@
 .data
 str1: .string " is ugly"
 str2: .string " is not ugly"
-input_num: .word 301                # input number
 
 .text
 main:
-    lw    s2, input_num                # load the value of input number n
-    add   a0, s2, zero                 # function argument
-    jal   func                         # jump to function
-    add   s3, a1, zero                 # store the return value of func
-    beqz  s3, not_ugly                 # branch when input number is not ugly
-    jal   print_ugly
+    li    a5, 210                      # load the value of input number n
+    add   a0, a5, zero                 # function argument
+    sw    a0, 0(sp)                    # store the input number
+    jal   func                         # jump to function is Ugly
+    add   a2, a0, zero                 # store the return value of func isUgly
+    lw    a0, 0(sp)                    # restore the input number                   
+    beqz  a2, not_ugly                 # branch when input number is not ugly
+    jal   print_ugly                   
     j     end
 not_ugly:
-    jal     print_not_ugly
+    jal   print_not_ugly
 end:                                   # end programm
     li    a7, 10
     ecall
-         
+    
 func:
-    li    a1, 1                        # return value of func
+    addi  sp, sp, -8                   # make space on stack 
+    sw    ra, 4(sp)
+    sw    a0, 0(sp)
+    add   a5, a0, zero
+    li    a0, 1                        # return value of func
 loop:                                  # begin of the do-while loop
-    li    t0, 2
-    rem   t4, a0, t0                   # t4 = n % 2
-    bne   t4, zero, elif_3             # if t4 != 0, go to elif_3
-    srli  a0, a0, 1                    # if t4 == 0, n /= 2
+    li    a2, 2
+    rem   a4, a5, a2                   # a4 = n % 2
+    bne   a4, zero, elif_3             # if a4 != 0, go to elif_3
+    srli  a5, a5, 1                    # if a4 == 0, n /= 2
     j     compare                      
 elif_3:
-    li    t0, 3                        # t4 = n % 3
-    rem   t4, a0, t0                   # if t4 != 0, go to elif_5
-    bne   t4, zero, elif_5             # if t4 == 0, n /= 3
-    div   a0, a0, t0
+    li    a2, 3                        # a4 = n % 3
+    rem   a4, a5, a2                   # if a4 != 0, go to elif_5
+    bne   a4, zero, elif_5             # if a4 == 0, n /= 3
+    div   a5, a5, a2
     j     compare    
 elif_5:
-    li    t0, 5                        # t4 = n %= 5
-    rem   t4, a0, t0                   # if t4 != 0, go to else 
-    bne   t4, zero, else               # if t4 == 0, n /= 5
-    div   a0, a0, t0
+    li    a2, 5                        # a4 = n %= 5
+    rem   a4, a5, a2                   # if a4 != 0, go to else 
+    bne   a4, zero, else               # if a4 == 0, n /= 5
+    div   a5, a5, a2
     j     compare
 else:
-    li    a1, 0                        # n is not ugly
+    li    a0, 0                        # n is not ugly
     j     return                       # break
 compare:
-    li    t0, 1                        
-    blt   t0, a0, loop                 # if n > 1 go to loop
+    li    a3, 1                        
+    blt   a3, a5, loop                 # if n > 1 go to loop
 return:
-    jr    ra
+    lw    ra, 4(sp)                    # restore ra
+    addi  sp, sp, 8                    # restore stack
+    jr    ra                           # return to main
     
 print_ugly:
-    add   a0, s2, zero                 # print input integer n
-    li    a7, 1
+    li    a7, 1                        # a0 is 1            
     ecall
     la    a0, str1                     # print str1
     li    a7, 4
     ecall
     jr    ra
 print_not_ugly:
-    add   a0, s2, zero                 # print input integer n
-    li    a7, 1
+    li    a7, 1                        # a0 is 0
     ecall
-    la    a0, str2                     # print str1
+    la    a0, str2                     # print sr2
     li    a7, 4
     ecall
     jr    ra
