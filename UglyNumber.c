@@ -3,7 +3,7 @@
 int isUgly(int n);
 
 int main() {
-    int n = 100;
+    int n = 210;
     int ugly = isUgly(n);
     char *str;
     if (ugly)

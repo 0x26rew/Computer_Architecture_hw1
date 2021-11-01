@@ -4,7 +4,7 @@ str2: .string " is not ugly."
 
 .text
 main:
-    li    a5, 300                      # load the value of input number n
+    li    a5, 210                      # load the value of input number n
     add   a0, a5, zero                 # function argument
     sw    a0, 0(sp)                    # store the input number
     jal   isUgly                       # jump to function isUgly
