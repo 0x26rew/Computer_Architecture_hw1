@@ -12,7 +12,7 @@ int main() {
         printf("%d is not ugly.\n", n);
     
 }
-
+//======================================
 int isUgly(int n) {
     int ugly = 1;
     if (n <= 1)
